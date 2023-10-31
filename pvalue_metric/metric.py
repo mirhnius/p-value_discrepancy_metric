@@ -47,6 +47,7 @@ def CDF_test(deltas, original_delta):
     Outputs:
         pvalue: pvalue of the test
         delta_CDF: CDF of the generated deltas
+        sorted_deltas: All the generated deltas sorted
         threshold_index: index of the threshold in the sorted deltas
     """
 
@@ -58,7 +59,7 @@ def CDF_test(deltas, original_delta):
     threshold__list =  np.ravel(np.where((sorted_deltas > original_delta) | (sorted_deltas == original_delta)))
     threshold_index  = threshold__list[0] if len(threshold__list) > 0 else n - 1
 
-    return delta_CDF[-1] - delta_CDF[threshold_index], delta_CDF, threshold_index
+    return delta_CDF[-1] - delta_CDF[threshold_index], delta_CDF, sorted_deltas, threshold_index
 
 
 def original_cohort_properties(data, Hypothesis_testing_func, n_bootstrap, **kwargs):
@@ -91,6 +92,7 @@ def pvalue_test(data, Hypothesis_testing_func, n_bootstrap, n_permutation, path=
         CDF_test function's outputs:
             pvalue: pvalue of the test
             delta_CDF: CDF of the generated deltas
+            sorted_deltas: All the generated deltas sorted
             threshold_index: index of the threshold in the sorted deltas
         original_mean_delta: mean delta of the original cohort
     """
@@ -110,7 +112,7 @@ def pvalue_test(data, Hypothesis_testing_func, n_bootstrap, n_permutation, path=
                                                 G2_bootstraps[bootstrap_itr], **kwargs)[1]
         
         mean_deltas[permutation_itr] = mean_euclidean_distance(p_values)
-        all_bootstrapes[permutation_itr] = p_values[bootstrap_itr]
+        all_bootstrapes[permutation_itr] = p_values
 
     original_mean_delta, original_cohort_pvalues = original_cohort_properties(data, \
                                     Hypothesis_testing_func, n_bootstrap, **kwargs)
