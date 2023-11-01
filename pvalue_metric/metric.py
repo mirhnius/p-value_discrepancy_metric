@@ -2,8 +2,10 @@ import numpy as np
 # from pvalue_metric import helper
 import helper
 
+TXT = '.txt'
+PRM_P = 'permeuted_cohorts_pvalues_'
+ORI_P = 'original_cohort_pvalues_'
 NonePath = type('NonePath', (), {'resolve': lambda: None})
-
 
 def mean_euclidean_distance(pvalues:np.array):
     """
@@ -76,7 +78,7 @@ def original_cohort_properties(data, Hypothesis_testing_func, n_bootstrap, **kwa
 
 
 #should change the name of mean_delta and might add a function for original delta calculation
-def pvalue_test(data, Hypothesis_testing_func, n_bootstrap, n_permutation, path=NonePath, name=None, **kwargs):
+def pvalue_test(data, Hypothesis_testing_func, n_bootstrap, n_permutation, path=NonePath, experiment_name=None, **kwargs):
     """
     This function calculate pmetric for a given data (two set of groups)
     and Hypothesis testing function
@@ -117,8 +119,8 @@ def pvalue_test(data, Hypothesis_testing_func, n_bootstrap, n_permutation, path=
     original_mean_delta, original_cohort_pvalues = original_cohort_properties(data, \
                                     Hypothesis_testing_func, n_bootstrap, **kwargs)
     if path.resolve() != None:
-        np.savetxt(path / f"permeuted_cohorts_pvalues_{name}.txt", all_bootstrapes)
-        np.savetxt(path / f"original_cohort_pvalues_{name}.txt", original_cohort_pvalues)
+        np.savetxt(path / (PRM_P + experiment_name + TXT), all_bootstrapes)
+        np.savetxt(path / (ORI_P + experiment_name + TXT), original_cohort_pvalues)
       
     return CDF_test(mean_deltas, original_mean_delta), original_mean_delta
 
