@@ -4,4 +4,5 @@ outputs
 .cache
 livingpark_utils-ppmiDownloader.log
 simulations/dummies.sh
-
+simulations/fixed_effect
+simulations/fixed_sample_size
